@@ -48,6 +48,8 @@ namespace CestasDaPrima
             new Produto {Id = 29, Nome = "Salada de Frutas", Preco = 6.0m},
             new Produto {Id = 30, Nome = "Pão de Banana", Preco = 4.7m}
         };
+
+
         public Form3()
         {
             InitializeComponent();
@@ -56,6 +58,19 @@ namespace CestasDaPrima
         private void Form3_Load(object sender, EventArgs e)
         {
             configuraListView();
+
+            foreach (Produto produto in lista_produtos) //percorri todos os produtos e atualizei para cada um 
+            {
+                AtualizaListView(produto); //chama a função para atulizar o listview
+            }
+        }
+
+        void AtualizaListView(Produto produto) //recebe cada produto por paramentro
+    {
+            ListViewItem item = new ListViewItem(produto.Id.ToString()); //cria um objeto passando o produto iD
+            item.SubItems.Add(produto.Nome); //adiciona como subitem o nome do produto
+            item.SubItems.Add(produto.Preco.ToString("c")); //adiciona como subitem o preco do produto
+            lsvItens.Items.Add(item); //adiciona o item ao listview (lsvItens)
         }
 
         void configuraListView() 
@@ -85,5 +100,25 @@ namespace CestasDaPrima
 
             AdicionarItemListView(produto);
         }
+
+
+
+
+        private void btnRemover_Click(object sender, EventArgs e)
+        {
+            // Obter o produto selecionado na ListView
+            ListViewItem selectedItem = lsvItens.SelectedItems[0];
+            int selectedProductId = int.Parse(selectedItem.Text);
+
+            // Encontrar o produto correspondente na lista de produtos
+            Produto produtoSelecionado = lista_produtos.Find(p => p.Id == selectedProductId);
+
+            // Remover o produto da lista
+            lista_produtos.Remove(produtoSelecionado);
+
+            // Remover o item da ListView
+            lsvItens.Items.Remove(selectedItem);
+        }
+
     }
 }
