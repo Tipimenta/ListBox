@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -58,20 +59,8 @@ namespace CestasDaPrima
         private void Form3_Load(object sender, EventArgs e)
         {
             configuraListView();
-
-            foreach (Produto produto in lista_produtos) //percorri todos os produtos e atualizei para cada um 
-            {
-                AtualizaListView(produto); //chama a função para atulizar o listview
-            }
         }
-
-        void AtualizaListView(Produto produto) //recebe cada produto por paramentro
-    {
-            ListViewItem item = new ListViewItem(produto.Id.ToString()); //cria um objeto passando o produto iD
-            item.SubItems.Add(produto.Nome); //adiciona como subitem o nome do produto
-            item.SubItems.Add(produto.Preco.ToString("c")); //adiciona como subitem o preco do produto
-            lsvItens.Items.Add(item); //adiciona o item ao listview (lsvItens)
-        }
+            
 
         void configuraListView() 
         {
@@ -79,6 +68,19 @@ namespace CestasDaPrima
             lsvItens.Columns.Add("ID");
             lsvItens.Columns.Add("Nome");
             lsvItens.Columns.Add("Preço");
+            AtualizaListView(); //chama a função para atulizar o listview
+        }
+
+        void AtualizaListView() //recebe cada produto por paramentro
+        {
+            // Limpa os itens da lista
+            lsvItens.Items.Clear();
+
+            // Percorre os itens da lista, adicionando no list View
+            foreach (Produto produto in lista_produtos)
+            {
+                AdicionarItemListView(produto);
+            }
         }
 
         void AdicionarItemListView(Produto produto)
@@ -101,24 +103,66 @@ namespace CestasDaPrima
             AdicionarItemListView(produto);
         }
 
-
-
-
         private void btnRemover_Click(object sender, EventArgs e)
         {
-            // Obter o produto selecionado na ListView
-            ListViewItem selectedItem = lsvItens.SelectedItems[0];
-            int selectedProductId = int.Parse(selectedItem.Text);
+           // Pega os itens selecionados de um ListView
+            //SelectedListViewItemCollection itens = lsvItens.SelectedItems;
 
-            // Encontrar o produto correspondente na lista de produtos
-            Produto produtoSelecionado = lista_produtos.Find(p => p.Id == selectedProductId);
+            // Percorre cada item selecionado no ListView
+            foreach (ListViewItem item in lsvItens.SelectedItems)
+            {
+                int id = int.Parse(item.Text);
 
-            // Remover o produto da lista
-            lista_produtos.Remove(produtoSelecionado);
+                Produto produto = lista_produtos.Find(prod => prod.Id == id);
 
-            // Remover o item da ListView
-            lsvItens.Items.Remove(selectedItem);
+                lista_produtos.Remove(produto);
+            }
+
+            AtualizaListView();
+
         }
 
+        private void btnEditar_Click(object sender, EventArgs e)
+        {
+
+
+            foreach (ListViewItem item in lsvItens.SelectedItems)
+            {
+                int id = int.Parse(item.Text);
+
+                Produto produto = lista_produtos.Find(prod => prod.Id == id);
+                int index = lista_produtos.IndexOf(produto);
+
+                textId.Text = produto.Id;
+                textNome.Text = produto.Nome;
+                textPreco.Text = produto.Preco.ToString();
+             }
+
+            btnEditar.Visible = false;
+            btnSalvar.Visible = true;
+
+        }
+
+        private void btnSalvar_Click(object sender, EventArgs e)
+        {
+
+            
+                int id = 
+
+                Produto produto = lista_produtos.Find(prod => prod.Id == id);
+
+                produto.Nome = textNome.Text;
+                produto.Preco = decimal.Parse(textPreco.Text); 
+
+               
+                lista_produtos = produto.Nome;  
+                item.SubItems[2].Text = produto.Preco.ToString("c");
+
+            }
+
+            
+            btnEditar.Visible = true;
+            btnSalvar.Visible = false;
+        }
     }
 }

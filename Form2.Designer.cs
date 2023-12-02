@@ -51,6 +51,7 @@
             this.txtNovoItem.Name = "txtNovoItem";
             this.txtNovoItem.Size = new System.Drawing.Size(271, 26);
             this.txtNovoItem.TabIndex = 1;
+            this.txtNovoItem.TextChanged += new System.EventHandler(this.txtNovoItem_TextChanged);
             // 
             // btnAdicionar
             // 

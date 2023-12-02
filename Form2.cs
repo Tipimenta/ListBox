@@ -82,5 +82,10 @@ namespace CestasDaPrima
 
             AtualizaListBox();
         }
+
+        private void txtNovoItem_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
